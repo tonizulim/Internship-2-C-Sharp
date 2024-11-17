@@ -584,7 +584,7 @@ void NewTransaction(Dictionary<int, (string Name, string Surname, DateTime Date,
         int.TryParse(Console.ReadLine(), out Odabir);
     }
     while (Odabir < 1 || Odabir > CategoryOptions.Length);
-    Console.WriteLine(Odabir);
+
     Category = CategoryOptions[Odabir - 1];
 
     if (Ttype.ToLower() == "rashod")
@@ -1403,13 +1403,13 @@ void RashodInCategory(Dictionary<int, (string Ttype, float Amount, string Descri
             }
         }
     }
-    if(CategoryCounter == 0)
+    if(CounterRashodi == 0)
     {
         Console.WriteLine($"ne postoji rashod sa kategorijom {CategoryOptions[Odabir - 1]}");
     }
     else
     {
-        Console.WriteLine($"Posototak rashoda sa kategorijom {CategoryOptions[Odabir - 1]} je : {CategoryCounter / CategoryCounter}");
+        Console.WriteLine($"Posototak rashoda sa kategorijom {CategoryOptions[Odabir - 1]} je : {CategoryCounter / CounterRashodi}");
     }
 
 
