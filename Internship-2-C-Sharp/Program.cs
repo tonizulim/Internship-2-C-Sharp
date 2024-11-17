@@ -10,8 +10,6 @@ using System.Security.Principal;
 using System.Transactions;
 using System.Xml.Linq;
 
-//fale datumi i sve s datumima
-
 DateTime NewDate()
 {
     DateTime Date;
@@ -476,7 +474,7 @@ void NewTransaction(Dictionary<int, (string Name, string Surname, DateTime Date,
 
     Console.WriteLine("Nova transakcija.");
     string DateOption;
-    DateTime Date;
+    DateTime Date = DateTime.Now;
     string Ttype = "";
     float Amount = 0;
     string Description = "Standardna transakcija";
@@ -585,17 +583,14 @@ void NewTransaction(Dictionary<int, (string Name, string Surname, DateTime Date,
 
         int.TryParse(Console.ReadLine(), out Odabir);
     }
-    while (Odabir < 0 && Odabir > CategoryOptions.Length);
-
+    while (Odabir < 1 || Odabir > CategoryOptions.Length);
+    Console.WriteLine(Odabir);
     Category = CategoryOptions[Odabir - 1];
 
     if (Ttype.ToLower() == "rashod")
     {
         Amount = -Amount;
     }
-
-    Console.WriteLine("Unesi Datum: (YYYY.MM.DD)");
-    Date = NewDate();
 
     UserDictionary[UserID].TransactionLog[Guid.NewGuid().GetHashCode()] = (Ttype, Amount, Description, Category, Date, Account);
 
@@ -684,7 +679,7 @@ void EditTransaction(Dictionary<int, (string Ttype, float Amount, string Descrip
     DateTime NewDatee;
     string stringYN;
 
-    Console.WriteLine("Unesi ID korisnika kojeg zelite urediti:");
+    Console.WriteLine("Unesi ID transakcije koju zelite urediti:");
     int.TryParse(Console.ReadLine(), out TargetTransactionId);
 
     if (!TransactionLog.ContainsKey(TargetTransactionId))
@@ -759,7 +754,7 @@ void EditTransaction(Dictionary<int, (string Ttype, float Amount, string Descrip
 
             int.TryParse(Console.ReadLine(), out Odabir);
         }
-        while (Odabir < 0 && Odabir > CategoryOptions.Length);
+        while (Odabir < 1 || Odabir > CategoryOptions.Length);
 
         NewCategory = CategoryOptions[Odabir - 1];
     }
@@ -815,7 +810,7 @@ void EditTransaction(Dictionary<int, (string Ttype, float Amount, string Descrip
 void DeleteTransctionID(Dictionary<int, (string Ttype, float Amount, string Description, string Category, DateTime Date, string Account)> TransactionLog, string Account)
 {
     int DeleteTransactionID;
-    Console.WriteLine("Unesi ID korisnika kojeg zelite izbrisati:");
+    Console.WriteLine("Unesi ID transakcije koju zelite izbrisati:");
     int.TryParse(Console.ReadLine(), out DeleteTransactionID);
 
     if (TransactionLog.ContainsKey(DeleteTransactionID))
@@ -968,7 +963,7 @@ void DeleteTransctionCategory(Dictionary<int, (string Ttype, float Amount, strin
 
         int.TryParse(Console.ReadLine(), out Odabir);
     }
-    while (Odabir < 0 && Odabir > CategoryOptions.Length);
+    while (Odabir < 1 || Odabir > CategoryOptions.Length);
 
     Category = CategoryOptions[Odabir - 1];
 
@@ -1142,12 +1137,12 @@ void PrintDateSortedTransaction(Dictionary<int, (string Ttype, float Amount, str
         SortedTransaction = TransactionLog
             .OrderBy(entry => entry.Value.Date).Reverse()
             .ToList();
-        Console.WriteLine("Ispis svih transakcija sortirane po iznosu silazno");
+        Console.WriteLine("Ispis svih transakcija sortirane po datumu silazno");
 
     }
     else
     {
-        Console.WriteLine("Ispis svih transakcija sortirane po iznosu uzlazno");
+        Console.WriteLine("Ispis svih transakcija sortirane po datumu uzlazno");
     }
 
     Console.WriteLine("ID - Tip - Iznos - Opis - Kategorija - Datum");
@@ -1192,7 +1187,7 @@ void PrintTransactionCategory(Dictionary<int, (string Ttype, float Amount, strin
 
         int.TryParse(Console.ReadLine(), out Odabir);
     }
-    while (Odabir < 0 && Odabir > CategoryOptions.Length);
+    while (Odabir < 1 || Odabir > CategoryOptions.Length);
 
     Category = CategoryOptions[Odabir - 1];
 
@@ -1243,7 +1238,7 @@ void PrintTransactionCategoryTtype(Dictionary<int, (string Ttype, float Amount, 
 
         int.TryParse(Console.ReadLine(), out Odabir);
     }
-    while (Odabir < 0 && Odabir > CategoryOptions.Length);
+    while (Odabir < 1 || Odabir > CategoryOptions.Length);
 
     Category = CategoryOptions[Odabir - 1];
 
@@ -1392,7 +1387,7 @@ void RashodInCategory(Dictionary<int, (string Ttype, float Amount, string Descri
 
         int.TryParse(Console.ReadLine(), out Odabir);
     }
-    while (Odabir < 0 && Odabir > CategoryOptions.Length);
+    while (Odabir < 1 || Odabir > CategoryOptions.Length);
 
     int CounterRashodi = 0;
     int CategoryCounter = 0;
@@ -1408,7 +1403,14 @@ void RashodInCategory(Dictionary<int, (string Ttype, float Amount, string Descri
             }
         }
     }
-    Console.WriteLine($"Posototak rashoda sa kategorijom {CategoryOptions[Odabir - 1]} je : {CategoryCounter / CategoryCounter}");
+    if(CategoryCounter == 0)
+    {
+        Console.WriteLine($"ne postoji rashod sa kategorijom {CategoryOptions[Odabir - 1]}");
+    }
+    else
+    {
+        Console.WriteLine($"Posototak rashoda sa kategorijom {CategoryOptions[Odabir - 1]} je : {CategoryCounter / CategoryCounter}");
+    }
 
 
 
